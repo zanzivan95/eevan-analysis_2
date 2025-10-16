@@ -1,6 +1,6 @@
 variable,rho,p
-novita,0.3596,0.3075
-noia_robot,0.2335,0.5161
-noia_computer,0.5385,0.1083
-gradimento,0.2237,0.5344
-comprensione,-0.0647,0.8592
+Novelty_Robot,0.3596,0.3075
+Boredom_Robot,0.2335,0.5161
+Boredom_Computer,0.5385,0.1083
+Overall_Enjoyment,0.2237,0.5344
+Puprose_Comprehension,-0.0647,0.8592
