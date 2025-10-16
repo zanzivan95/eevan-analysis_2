@@ -351,12 +351,12 @@ export default function App() {
     { condition: 'C2', mean: stats.C2.mean, sd: stats.C2.std }
   ] : [];
 
-  const chartDataSubjective = subjective && Object.keys(subjective[0] || {}).length ? Object.keys(subjective[0])
-    .filter(k => k.toLowerCase() !== 'participant' && k.toLowerCase() !== 'general and free notes (optional)')
-    .map(k => ({ 
-      variable: k.length > 30 ? k.substring(0, 30) + '...' : k, 
-      mean: (subjectiveStats?.[k]?.mean ?? 0) 
-    })) : [];
+const chartDataSubjective = subjectiveStats ? Object.keys(subjectiveStats)
+  .filter(k => !k.toLowerCase().includes('preference') && !k.toLowerCase().includes('notes'))
+  .map(k => ({ 
+    variable: k.length > 35 ? k.substring(0, 35) + '...' : k, 
+    mean: subjectiveStats[k].mean 
+  })) : [];
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 text-gray-800">
@@ -506,20 +506,24 @@ export default function App() {
             {activeTab === 'aggregate' && (
               <section className="bg-white p-6 rounded-lg shadow">
                 <h2 className="text-xl font-semibold mb-4">Aggregate Comparison</h2>
-                <div style={{ width: '100%', height: 360 }}>
-                  <ResponsiveContainer>
-                    <BarChart data={chartDataAggregate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="condition" />
-                      <YAxis label={{ value: '% Non-neutral', angle: -90, position: 'insideLeft' }} />
-                      <Tooltip formatter={(value:any) => value ? `${Number(value).toFixed(2)}%` : ''} />
-                      <Legend />
-                      <Bar dataKey="mean" fill="#2196F3" name="Mean">
-                        <ErrorBar dataKey="sd" width={6} strokeWidth={2} stroke="black" />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+            <div style={{ width: '100%', height: 480 }}>
+              <ResponsiveContainer>
+                <BarChart data={chartDataSubjective} margin={{ bottom: 100, left: 20, right: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="variable" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={150}
+                    interval={0}
+                    tick={{ fontSize: 11 }}
+                  />
+                  <YAxis domain={[0,7]} />
+                  <Tooltip formatter={(v:any) => Number(v).toFixed(2)} />
+                  <Bar dataKey="mean" fill="#9CA3AF" name="Mean" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div className="p-4 border rounded">
