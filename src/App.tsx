@@ -352,8 +352,11 @@ export default function App() {
   ] : [];
 
   const chartDataSubjective = subjective && Object.keys(subjective[0] || {}).length ? Object.keys(subjective[0])
-    .filter(k => k.toLowerCase() !== 'participant')
-    .map(k => ({ variable: k, mean: (subjectiveStats?.[k]?.mean ?? 0) })) : [];
+    .filter(k => k.toLowerCase() !== 'participant' && k.toLowerCase() !== 'general and free notes (optional)')
+    .map(k => ({ 
+      variable: k.length > 30 ? k.substring(0, 30) + '...' : k, 
+      mean: (subjectiveStats?.[k]?.mean ?? 0) 
+    })) : [];
 
   return (
     <div className="min-h-screen p-6 bg-gray-50 text-gray-800">
@@ -581,7 +584,7 @@ export default function App() {
                   <ResponsiveContainer>
                     <BarChart data={chartDataSubjective}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="variable" />
+                      <XAxis dataKey="variable" angle={-45} textAnchor="end" height={120} interval={0} style={{ fontSize: '10px' }} />
                       <YAxis domain={[0,7]} />
                       <Tooltip formatter={(v:any) => Number(v).toFixed(2)} />
                       <Bar dataKey="mean" fill="#9CA3AF" name="Mean" />
