@@ -148,7 +148,7 @@ export default function App() {
       parseCsvUrl('/data/raw_norm_grouped.csv').catch(()=>[]),
       parseCsvUrl('/data/aggregated_non_neutral.csv').catch(()=>[]),
       parseCsvUrl('/data/wilcoxon_per_emotion.csv').catch(()=>[]),
-      parseCsvUrl('/data/soggettivi_clean.csv').catch(()=>[]),
+      parseCsvUrl('/data/subjective_clean.csv').catch(()=>[]),
       parseCsvUrl('/data/spearman_delta_subjective.csv').catch(()=>[])
     ]).then(([r1, r2, r3, r4, r5]) => {
       setRawGrouped(r1.length ? r1 : null);
@@ -347,8 +347,8 @@ export default function App() {
     .map(r => ({ participant: r.participant, C1: Number(r.C1.toFixed(2)), C2: Number(r.C2.toFixed(2)) }));
 
   const chartDataAggregate = stats ? [
-    { condition: 'C1 (Robot)', C1: stats.C1.mean, C2: null, SD_C1: stats.C1.std, SD_C2: null },
-    { condition: 'C2 (Computer)', C1: null, C2: stats.C2.mean, SD_C1: null, SD_C2: stats.C2.std }
+    { condition: 'C1', mean: stats.C1.mean, sd: stats.C1.std },
+    { condition: 'C2', mean: stats.C2.mean, sd: stats.C2.std }
   ] : [];
 
   const chartDataSubjective = subjective && Object.keys(subjective[0] || {}).length ? Object.keys(subjective[0])
@@ -511,11 +511,8 @@ export default function App() {
                       <YAxis label={{ value: '% Non-neutral', angle: -90, position: 'insideLeft' }} />
                       <Tooltip formatter={(value:any) => value ? `${Number(value).toFixed(2)}%` : ''} />
                       <Legend />
-                      <Bar dataKey="C1" fill="#2196F3" name="C1 (Robot)">
-                        <ErrorBar dataKey="SD_C1" width={6} strokeWidth={2} stroke="black" />
-                      </Bar>
-                      <Bar dataKey="C2" fill="#FFC107" name="C2 (Computer)">
-                        <ErrorBar dataKey="SD_C2" width={6} strokeWidth={2} stroke="black" />
+                      <Bar dataKey="mean" fill="#2196F3" name="Mean">
+                        <ErrorBar dataKey="sd" width={6} strokeWidth={2} stroke="black" />
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
