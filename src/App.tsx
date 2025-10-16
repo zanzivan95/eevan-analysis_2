@@ -586,7 +586,13 @@ export default function App() {
                           <td className="p-2 border text-center font-medium">{r.participant}</td>
                           <td className="p-2 border text-right">{r.C1.toFixed(4)}</td>
                           <td className="p-2 border text-right">{r.C2.toFixed(4)}</td>
-                          <td className={`p-2 border text-right ${r.delta>0?'text-green-600':'r.delta<0? 'text-red-600':''}`}>{r.delta.toFixed(4)}</td>
+                          <td
+                            className={`p-2 border text-right ${
+                              r.delta > 0 ? 'text-green-600' : r.delta < 0 ? 'text-red-600' : ''
+                            }`}
+                          >
+                            {r.delta.toFixed(4)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
